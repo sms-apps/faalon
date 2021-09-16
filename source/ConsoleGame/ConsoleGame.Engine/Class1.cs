@@ -1,4 +1,4 @@
-﻿namespace ConsoleGame.Game
+﻿namespace ConsoleGame.Engine
 {
     public class Class1
     {
