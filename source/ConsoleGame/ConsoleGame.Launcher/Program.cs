@@ -1,15 +1,11 @@
 ﻿using ConsoleGame.Engine;
-using ConsoleGame.Engine.Services;
 
-var game = new Game(
-    DefaultConsoleGameDisplay.Create(new DisplaySettings(25, 50, ' ')),
-    DefaultConsoleGameLoopHandler.Create()
-);
+new Game(new DisplaySettings(25, 50, ' ')).Start();
 
+//var game = new Game(new DisplaySettings(25, 50, ' '));
 // overwrite one of the game methods with a nice lambda
 // game.Prerender = () => {  };
-
-game.Start();
+//game.Start();
 
 
 

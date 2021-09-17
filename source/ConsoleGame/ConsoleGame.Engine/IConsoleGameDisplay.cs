@@ -4,11 +4,11 @@
     {
         string Buffer { get; }
 
-        void Clear(char c = default);
+        void Clear();
+        void WriteContentsOfBuffer(bool clearBuffer = false);
         void Reset();
-        void Store(char c, int line, int column);
-        void Store(string s, int line, int columnStart);
-        void Write();
+        void Write(char c, int line, int column);
+        void Write(string s, int line, int columnStart);
 
     }
 }

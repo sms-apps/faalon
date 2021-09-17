@@ -44,7 +44,7 @@
 
         public void Render(IConsoleGameDisplay display)
         {
-            display.Write();
+            display.WriteContentsOfBuffer();
         }
     }
 }

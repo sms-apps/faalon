@@ -1,47 +1,71 @@
-﻿namespace ConsoleGame.Engine
+﻿using ConsoleGame.Engine.Services;
+
+namespace ConsoleGame.Engine
 {
     public class Game
     {
+        #region properties & construction
+
         private static IConsoleGameDisplay _display;
-        private static IConsoleGameLoopHandler _gameLoopHandler;
         private static readonly System.Timers.Timer _gameLoopTimer = new System.Timers.Timer(Constants.DefaultTimerCallbackIntervalWaitMs);
         private static Task _userInputTask;
         private static bool _started = false;
 
-        public Game(IConsoleGameDisplay display, IConsoleGameLoopHandler gameLoopHandler)
+        public Game(IConsoleGameDisplay display)
         {
             _display = display;
-            _gameLoopHandler = gameLoopHandler;
+            _gameLoopTimer.Elapsed += TimerElapsed;
+            _gameLoopTimer.AutoReset = true;
+
         }
 
-        /// <summary> Main game loop. </summary>
-        public virtual void Loop(object? sender, System.Timers.ElapsedEventArgs e)
+        public Game(DisplaySettings settings)
         {
-            Prerender();
-            Render();
+            _display = DefaultConsoleGameDisplay.Create(settings, DefaultConsoleGameScreenBuffer.Create(settings));
+            _gameLoopTimer.Elapsed += TimerElapsed;
+            _gameLoopTimer.AutoReset = true;
         }
 
+        #endregion
 
-        public Action Prerender = () =>
+        public Action Prerender = () => { _display.Reset(); };
+        public Action Render = () => { _display.WriteContentsOfBuffer(); };
+        public Action HandlerUserInput = () =>
         {
-            _display.Reset();
-            //_display.Store()
-        };
+            while (true)
+            {
+                var Key = Console.ReadKey().Key;
 
-        public Action Render = () =>
-        {
-            _display.Write();
+                switch (Key)
+                {
+                    case ConsoleKey.UpArrow:
+                    case ConsoleKey.W:
+                        break;
+
+                    case ConsoleKey.LeftArrow:
+                    case ConsoleKey.A:
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                    case ConsoleKey.S:
+                        break;
+
+                    case ConsoleKey.RightArrow:
+                    case ConsoleKey.D:
+                        break;
+
+                    case ConsoleKey.Escape:
+                        Environment.Exit(-1);
+                        break;
+                }
+            }
         };
 
         /// <summary> Start the <see cref="Game"/>. </summary>
         public void Start()
         {
-            //_display.WriteChar
-
             _started = true;
-            _userInputTask = Task.Factory.StartNew(() => _gameLoopHandler.HandleUserInput());
-            _gameLoopTimer.Elapsed += Loop;
-            _gameLoopTimer.AutoReset = true;
+            _userInputTask = Task.Factory.StartNew(() => HandlerUserInput);
             _gameLoopTimer.Start();
 
             // do nothing while we're waiting for input
@@ -58,6 +82,17 @@
             _gameLoopTimer.Dispose();
             _userInputTask.Dispose();
         }
+
+
+        #region internal game functionality
+
+        private void TimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Prerender();
+            Render();
+        }
+
+        #endregion
 
     }
 }
