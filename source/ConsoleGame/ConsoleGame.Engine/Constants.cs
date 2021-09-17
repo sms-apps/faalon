@@ -2,6 +2,6 @@
 {
     public class Constants
     {
-        public const int DefaultTimerCallbackIntervalWaitMs = 250;
+        public const int DefaultTimerCallbackIntervalWaitMs = 25;
     }
 }
