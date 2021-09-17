@@ -2,18 +2,8 @@
 {
     public class DefaultConsoleGameLoopHandler : IConsoleGameLoopHandler
     {
-        private readonly IConsoleGameDisplay _display;
-
-        private DefaultConsoleGameLoopHandler(IConsoleGameDisplay display)
-        {
-            _display = display;
-        }
-
-        public static DefaultConsoleGameLoopHandler Create(IConsoleGameDisplay display)
-        {
-            if (display == null) throw new ArgumentNullException(nameof(display));
-            return new DefaultConsoleGameLoopHandler(display);
-        }
+        private DefaultConsoleGameLoopHandler() { }
+        public static DefaultConsoleGameLoopHandler Create() => new DefaultConsoleGameLoopHandler();
 
         public void HandleUserInput()
         {
@@ -46,15 +36,15 @@
             }
         }
 
-        public void HandleWorldChanges()
+        public void Prerender(IConsoleGameDisplay display)
         {
-            // todo - any world changes due to game or user input here
+            //display.Reset();
+            //display.Store()
         }
 
-        public void Render()
+        public void Render(IConsoleGameDisplay display)
         {
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine(_display.Buffer());
+            display.Write();
         }
     }
 }

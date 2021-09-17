@@ -7,7 +7,7 @@ namespace ConsoleGame.Engine.Services
     {
         private static int Height;
         private static int Width;
-        private static char[,] _screenBuffer;
+        private static char[,] _backgroundLayer;
 
         #region construction
 
@@ -15,7 +15,7 @@ namespace ConsoleGame.Engine.Services
         {
             Height = settings.Height;
             Width = settings.Width;
-            _screenBuffer = new char[Width, Height];
+            _backgroundLayer = new char[Width, Height];
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -37,32 +37,39 @@ namespace ConsoleGame.Engine.Services
 
         #endregion construction
 
-        public void Write(char c, int x, int y) => _screenBuffer[x, y] = c;
+        public string Buffer
+        {
+            get
+            {
+                var sb = new StringBuilder();
+
+                for (int i = 0; i < Width; i++)
+                    for (int j = 0; j < Height; j++)
+                        sb.Append(_backgroundLayer[i, j]);
+
+                return sb.ToString();
+            }
+        }
 
         public void Clear(char c = default)
         {
-            for (int i = 0; i < Width; i++)
-                for (int j = 0; j < Height; j++)
-                    _screenBuffer[j, i] = c;
+            Console.Clear();
         }
 
-        public string Buffer()
+        public void Reset()
         {
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < Width; i++)
-                for (int j = 0; j < Height; j++)
-                    sb.Append(_screenBuffer[i, j]);
-
-            return sb.ToString();
+            Clear();
+            Console.SetCursorPosition(0, 0);
         }
 
-        public override string ToString() => Buffer();
+        public void Store(char c, int x, int y) => _backgroundLayer[x, y] = c;
 
-        public void Write(string s, int line, int columnStart)
+        public void Store(string s, int line, int columnStart)
         {
             if (s.Length > Width - columnStart) throw new ArgumentOutOfRangeException(nameof(s));
-            for(int i = 0; i < s.Length; i++) Write(s[i], columnStart + i, line);
+            for(int i = 0; i < s.Length; i++) Store(s[i], columnStart + i, line);
         }
+
+        public void Write() => Console.Write(Buffer);
     }
 }

@@ -6,4 +6,6 @@ class MyGame : Game
     public MyGame(IConsoleGameDisplay display, IConsoleGameLoopHandler gameLoopHandler) : base(display, gameLoopHandler)
     {
     }
+
+    
 }

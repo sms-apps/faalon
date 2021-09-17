@@ -6,9 +6,9 @@
         void HandleUserInput();
 
         /// <summary> Handles any world changes. </summary>
-        void HandleWorldChanges();
+        void Prerender(IConsoleGameDisplay display);
 
         /// <summary> Render whatever is in the display buffer to the screen. </summary>
-        void Render();
+        void Render(IConsoleGameDisplay display);
     }
 }

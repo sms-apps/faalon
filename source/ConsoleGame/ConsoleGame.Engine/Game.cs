@@ -1,6 +1,6 @@
 ﻿namespace ConsoleGame.Engine
 {
-    public abstract class Game
+    public class Game
     {
         private static IConsoleGameDisplay _display;
         private static IConsoleGameLoopHandler _gameLoopHandler;
@@ -17,9 +17,21 @@
         /// <summary> Main game loop. </summary>
         public virtual void Loop(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            _gameLoopHandler.HandleWorldChanges();
-            _gameLoopHandler.Render();
+            Prerender();
+            Render();
         }
+
+
+        public Action Prerender = () =>
+        {
+            _display.Reset();
+            //_display.Store()
+        };
+
+        public Action Render = () =>
+        {
+            _display.Write();
+        };
 
         /// <summary> Start the <see cref="Game"/>. </summary>
         public void Start()
