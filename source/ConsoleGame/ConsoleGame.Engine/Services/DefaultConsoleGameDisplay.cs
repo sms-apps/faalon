@@ -1,11 +1,10 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace ConsoleGame.Engine.Services
 {
     public class DefaultConsoleGameDisplay : IConsoleGameDisplay
     {
-        private static IScreenBuffer _buffer;
+        private static IScreenBuffer? _buffer;
         private static int Height;
         private static int Width;
 
@@ -13,15 +12,16 @@ namespace ConsoleGame.Engine.Services
 
         private DefaultConsoleGameDisplay(DisplaySettings settings, IScreenBuffer buffer)
         {
-            _buffer = buffer;
+            _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             Height = settings.Height;
             Width = settings.Width;
 
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
+            Console.CursorVisible = false;
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Console.Clear();
-                Console.SetCursorPosition(0, 0);
-                Console.CursorVisible = false;
                 Console.SetWindowSize(1, 1);
                 Console.SetBufferSize(Width, Height);
                 Console.SetWindowSize(Width, Height);
@@ -30,15 +30,13 @@ namespace ConsoleGame.Engine.Services
 
         public static DefaultConsoleGameDisplay Create(DisplaySettings settings, IScreenBuffer buffer)
         {
-            if (settings.Height < 0) throw new ArgumentOutOfRangeException(nameof(settings.Height));
-            if (settings.Width < 0) throw new ArgumentOutOfRangeException(nameof(settings.Width));
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             return new DefaultConsoleGameDisplay(settings, buffer);
         }
 
         #endregion construction
 
-        public string Buffer => _buffer.Retrieve();
+        public IScreenBuffer Buffer => _buffer;
 
         public void Clear()
         {
@@ -47,8 +45,8 @@ namespace ConsoleGame.Engine.Services
 
         public void WriteContentsOfBuffer(bool clearBuffer = false)
         {
-            Console.Write(_buffer.Retrieve());
-            if (clearBuffer) _buffer.Clear();
+            Console.Write(_buffer?.Retrieve());
+            if (clearBuffer) _buffer?.Clear();
         }
 
         public void Reset()

@@ -18,7 +18,7 @@ namespace ConsoleGame.Engine.Services
             _displaySettings = settings;
 
         public static DefaultConsoleGameScreenBuffer Create(DisplaySettings settings) => 
-            new DefaultConsoleGameScreenBuffer(settings);
+            new(settings);
 
         public void Clear()
         {

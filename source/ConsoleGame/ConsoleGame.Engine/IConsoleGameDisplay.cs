@@ -2,7 +2,7 @@
 {
     public interface IConsoleGameDisplay
     {
-        string Buffer { get; }
+        IScreenBuffer Buffer { get; }
 
         void Clear();
         void WriteContentsOfBuffer(bool clearBuffer = false);

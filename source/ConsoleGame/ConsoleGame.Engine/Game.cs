@@ -18,17 +18,20 @@ namespace ConsoleGame.Engine
         public Game(DisplaySettings settings)
         {
             _display = DefaultConsoleGameDisplay.Create(settings, DefaultConsoleGameScreenBuffer.Create(settings));
+            if (settings.Character.HasValue) _display.Buffer.Store(settings.Character.Value, new Core.SimplePoint(20, 10));
         }
 
         #endregion
 
         public Action Prerender = () => 
         { 
-            _display.Buffer
-            _display.Reset(); 
+            // todo - who knows
         };
 
-        public Action Render = () => { _display.WriteContentsOfBuffer(); };
+        public Action Render = () => 
+        { 
+            _display.WriteContentsOfBuffer(); 
+        };
 
         protected virtual void HandleUserInput(ConsoleKey key)
         {
