@@ -12,6 +12,7 @@ namespace ConsoleGame.Engine.Services
 
         private DefaultConsoleGameDisplay(DisplaySettings settings, IScreenBuffer buffer)
         {
+            Settings = settings;
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
             Height = settings.Height;
             Width = settings.Width;
@@ -37,6 +38,8 @@ namespace ConsoleGame.Engine.Services
         #endregion construction
 
         public IScreenBuffer Buffer => _buffer;
+
+        public DisplaySettings Settings { get; private set; }
 
         public void Clear()
         {

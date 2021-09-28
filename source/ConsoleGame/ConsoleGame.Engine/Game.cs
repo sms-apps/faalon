@@ -17,18 +17,24 @@ namespace ConsoleGame.Engine
 
         public Game(DisplaySettings settings)
         {
-            _display = DefaultConsoleGameDisplay.Create(settings, DefaultConsoleGameScreenBuffer.Create(settings));
-            if (settings.Character.HasValue) _display.Buffer.Store(settings.Character.Value, new Core.SimplePoint(20, 10));
+            _display = DefaultConsoleGameDisplay.Create(
+                settings, 
+                DefaultConsoleGameScreenBuffer.Create(settings)
+            );
         }
 
         #endregion
 
-        public Action Prerender = () => 
-        { 
-            // todo - who knows
+        public Action FigureOutWhatToDraw = () => 
+        {
+            // start with a fresh screen...?
+            _display.Reset();
+
+            if (_display.Settings.Character.HasValue)
+                _display.Buffer.Store(_display.Settings.Character.Value, new Core.SimplePoint(20, 10));
         };
 
-        public Action Render = () => 
+        public Action DrawIt = () => 
         { 
             _display.WriteContentsOfBuffer(); 
         };
@@ -87,8 +93,8 @@ namespace ConsoleGame.Engine
 
         private void GameLoop_TimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            Prerender();
-            Render();
+            FigureOutWhatToDraw();
+            DrawIt();
         }
 
         #endregion

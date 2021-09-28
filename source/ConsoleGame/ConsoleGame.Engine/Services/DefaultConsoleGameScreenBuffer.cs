@@ -46,7 +46,15 @@ namespace ConsoleGame.Engine.Services
 
         public void Store(char input, SimplePoint point)
         {
-            _locations.Add(point, input);
+            if (_locations.ContainsKey(point))
+            {
+                if (_locations[point] != input)
+                {
+                    _locations.Remove(point);
+                    _locations.Add(point, input);
+                }
+            }
+            else _locations.Add(point, input);
         }
 
         public void Store(string input, SimplePoint point)

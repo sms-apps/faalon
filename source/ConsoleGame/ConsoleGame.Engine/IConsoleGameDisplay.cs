@@ -3,6 +3,7 @@
     public interface IConsoleGameDisplay
     {
         IScreenBuffer Buffer { get; }
+        DisplaySettings Settings { get; }
 
         void Clear();
         void WriteContentsOfBuffer(bool clearBuffer = false);
